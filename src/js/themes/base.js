@@ -111,6 +111,7 @@ const colors = {
     dark: '#f8f8f8',
     light: '#666666',
   },
+  'hpe-color-text-onStrong': 'white',
   'selected-background': 'brand',
   'selected-text': 'text-strong',
   white: '#FFFFFF',
@@ -2628,14 +2629,25 @@ export const generate = (baseSpacing = 24, scale = 6) => {
         },
       },
       drop: {
+        column: {
+          maxHeight: '240px',
+        },
         option: {
           // background: undefined,
+          pad: {
+            vertical: 'xsmall',
+            horizontal: 'small',
+          },
+          round: 'xsmall',
           hover: {
             background: 'active-background',
           },
           selected: {
             background: 'selected',
-            color: 'white',
+            color: 'hpe-color-text-onStrong',
+            text: {
+              weight: 'medium',
+            },
             hover: {
               // background: undefined,
             },
