@@ -2644,7 +2644,7 @@ export const generate = (baseSpacing = 24, scale = 6) => {
           },
           selected: {
             background: 'selected',
-            color: 'hpe-color-text-onStrong',
+            color: 'white',
             text: {
               weight: 'medium',
             },
