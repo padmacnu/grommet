@@ -1,6 +1,5 @@
 // SPDX-FileCopyrightText: © Hewlett Packard Enterprise Development LP
 // SPDX-License-Identifier: Apache-2.0
-/* eslint-disable max-len */
 import React, { useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
@@ -25,13 +24,35 @@ const PopupColumnBox = styled(Box)`
   scrollbar-width: thin;
 `;
 
+const resolveMetric = (value, theme) =>
+  theme?.global?.edgeSize?.[value] || value;
+
+const resolveFontWeight = (weight) => {
+  if (weight === 'medium') return 500;
+  return weight;
+};
+
 const PopupOption = styled.div`
   box-sizing: border-box;
   cursor: pointer;
   display: flex;
-  padding: ${(props) =>
-    `${props.theme.global.edgeSize.xxsmall} ${props.theme.global.edgeSize.xsmall}`};
-  border-radius: ${(props) => props.theme.global.control?.border?.radius};
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: ${(props) => {
+    const vertical = resolveMetric(
+      props.theme.timeInput?.drop?.option?.pad?.vertical,
+      props.theme,
+    );
+    const horizontal = resolveMetric(
+      props.theme.timeInput?.drop?.option?.pad?.horizontal,
+      props.theme,
+    );
+    return `${vertical || '0px'} ${horizontal || '0px'}`;
+  }};
+  border-radius: ${(props) =>
+    resolveMetric(props.theme.timeInput?.drop?.option?.round, props.theme) ||
+    props.theme.global.control.border.radius};
   background: ${(props) => {
     if (props.$selected) {
       return normalizeColor(
@@ -96,13 +117,11 @@ const PopupColumn = ({
   sections,
   theme,
 }) => {
-  // When inline (in DateTimeInput), use 'medium' to match Calendar height.
-  // Otherwise use timeInput drop maxHeight with fallback to 'small'.
-  const maxHeightToken = inline ? 'medium' : null;
-  const maxHeight =
-    (maxHeightToken && theme.global.size?.[maxHeightToken]) ||
-    theme.timeInput?.drop?.column?.maxHeight ||
-    theme.global.size.small;
+  // Keep inline DateTimeInput columns aligned with Calendar height.
+  // For standalone TimeInput, allow a dedicated drop.column.maxHeight token.
+  const maxHeight = inline
+    ? theme.global.size.medium
+    : theme.timeInput?.drop?.column?.maxHeight || theme.global.size.small;
 
   return (
     <PopupColumnBox
@@ -124,8 +143,17 @@ const PopupColumn = ({
           (section === SECTION_PERIOD && sections.period === option);
 
         const optionColor = selected
-          ? theme.timeInput?.drop?.option?.selected?.color || 'text'
+          ? theme.timeInput?.drop?.option?.selected?.color ||
+            theme.global.selected.color ||
+            'text'
           : 'text';
+        const optionWeight = selected
+          ? resolveFontWeight(
+              theme.timeInput?.drop?.option?.selected?.text?.weight || 'medium',
+            )
+          : resolveFontWeight(theme.timeInput?.drop?.option?.text?.weight) ||
+            theme.global.input.weight ||
+            theme.global.input.font.weight;
         const isActive = selected && activeSection === section;
         let optionTabIndex = -1;
         if (inline) {
@@ -157,11 +185,15 @@ const PopupColumn = ({
             onFocus={() => onSetSection(section)}
           >
             <Text
-              size={theme.global.input.font.size || 'small'}
-              weight={selected ? 'bold' : 'normal'}
+              size={
+                theme.timeInput?.drop?.option?.text?.size ||
+                theme.global.input.font.size
+              }
+              weight={optionWeight}
+              textAlign="center"
               color={optionColor}
             >
-              {section === SECTION_PERIOD ? option : pad(option)}
+              {section === SECTION_PERIOD ? option.toLowerCase() : pad(option)}
             </Text>
           </PopupOption>
         );

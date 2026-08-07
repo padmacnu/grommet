@@ -2643,14 +2643,25 @@ export const generate = (baseSpacing = 24, scale = 6) => {
         },
       },
       drop: {
+        column: {
+          maxHeight: '240px',
+        },
         option: {
           // background: undefined,
+          pad: {
+            vertical: 'xsmall',
+            horizontal: 'small',
+          },
+          round: 'xsmall',
           hover: {
             background: 'active-background',
           },
           selected: {
             background: 'selected',
             color: 'white',
+            text: {
+              weight: 'medium',
+            },
             hover: {
               // background: undefined,
             },

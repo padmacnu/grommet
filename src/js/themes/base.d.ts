@@ -2471,14 +2471,29 @@ export interface ThemeType {
       };
     };
     drop?: {
+      column?: {
+        maxHeight?: string;
+      };
       option?: {
         background?: ColorType;
+        pad?: {
+          vertical?: string;
+          horizontal?: string;
+        };
+        round?: string;
+        text?: {
+          size?: string;
+          weight?: number | string;
+        };
         hover?: {
           background?: ColorType;
         };
         selected?: {
           background?: ColorType;
           color?: ColorType;
+          text?: {
+            weight?: number | string;
+          };
           hover?: {
             background?: ColorType;
           };
